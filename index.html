@@ -1,1483 +1,1399 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Tesla vehicle discovery and customer inquiry portal.">
-  <title>Tesla Deals | Electric Vehicle Discovery</title>
-
-  <style>
-    :root {
-      --bg: #f7f8fa;
-      --surface: #ffffff;
-      --text: #17191c;
-      --muted: #68707a;
-      --line: #e5e7eb;
-      --accent: #e82127;
-      --dark: #111315;
-      --shadow: 0 18px 50px rgba(17,19,21,.08);
-      --radius: 22px;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system,
-        BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.55;
-    }
-
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    button,
-    input,
-    textarea,
-    select {
-      font: inherit;
-    }
-
-    button {
-      cursor: pointer;
-    }
-
-    .topbar {
-      background: #111315;
-      color: #fff;
-      text-align: center;
-      padding: 9px 16px;
-      font-size: 13px;
-      letter-spacing: .2px;
-    }
-
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      background: rgba(255,255,255,.94);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(229,231,235,.85);
-    }
-
-    .nav {
-      max-width: 1180px;
-      margin: auto;
-      height: 72px;
-      padding: 0 22px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      font-weight: 800;
-      letter-spacing: -.5px;
-    }
-
-    .brand-mark {
-      width: 35px;
-      height: 35px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      background: #111315;
-      color: #fff;
-      font-size: 15px;
-      font-weight: 800;
-    }
-
-    .brand span:last-child {
-      font-size: 17px;
-    }
-
-    .navlinks {
-      display: flex;
-      gap: 26px;
-      align-items: center;
-    }
-
-    .navlinks a {
-      font-size: 14px;
-      color: #34383d;
-      font-weight: 600;
-    }
-
-    .navlinks a:hover {
-      color: var(--accent);
-    }
-
-    .nav-cta {
-      background: var(--dark);
-      color: #fff;
-      border: 0;
-      border-radius: 999px;
-      padding: 11px 18px;
-      font-weight: 700;
-    }
-
-    .nav-cta:hover {
-      background: var(--accent);
-    }
-
-    .menu {
-      display: none;
-      background: none;
-      border: 0;
-      font-size: 25px;
-    }
-
-    .hero {
-      min-height: 640px;
-      display: grid;
-      place-items: center;
-      padding: 70px 22px;
-      background:
-        radial-gradient(
-          circle at 15% 15%,
-          rgba(232,33,39,.10),
-          transparent 28%
-        ),
-        radial-gradient(
-          circle at 85% 75%,
-          rgba(0,0,0,.08),
-          transparent 28%
-        ),
-        linear-gradient(135deg,#fff 0%,#f1f3f5 100%);
-      overflow: hidden;
-    }
-
-    .hero-inner {
-      max-width: 1180px;
-      width: 100%;
-      display: grid;
-      grid-template-columns: 1.05fr .95fr;
-      gap: 55px;
-      align-items: center;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--accent);
-      font-weight: 800;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 1.6px;
-      margin-bottom: 18px;
-    }
-
-    .eyebrow:before {
-      content: "";
-      width: 25px;
-      height: 2px;
-      background: var(--accent);
-    }
-
-    h1 {
-      font-size: clamp(42px,6vw,76px);
-      line-height: 1.02;
-      letter-spacing: -4px;
-      max-width: 700px;
-      margin-bottom: 22px;
-    }
-
-    .hero-copy {
-      color: var(--muted);
-      font-size: 18px;
-      max-width: 590px;
-      margin-bottom: 30px;
-    }
-
-    .actions {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      border: 1px solid var(--dark);
-      border-radius: 999px;
-      padding: 13px 21px;
-      font-weight: 750;
-      transition: .2s ease;
-    }
-
-    .btn-primary {
-      background: var(--dark);
-      color: #fff;
-    }
-
-    .btn-primary:hover {
-      background: var(--accent);
-      border-color: var(--accent);
-      transform: translateY(-1px);
-    }
-
-    .btn-secondary {
-      background: #fff;
-    }
-
-    .btn-secondary:hover {
-      border-color: #9aa0a6;
-      transform: translateY(-1px);
-    }
-
-    .hero-visual {
-      min-height: 410px;
-      border-radius: 34px;
-      position: relative;
-      overflow: hidden;
-      background:
-        radial-gradient(
-          circle at 70% 30%,
-          rgba(255,255,255,.45),
-          transparent 23%
-        ),
-        linear-gradient(145deg,#252a2f,#090a0b);
-      box-shadow: 0 30px 70px rgba(0,0,0,.22);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .car-shape {
-      width: 80%;
-      height: 145px;
-      border-radius: 100px 150px 45px 45px;
-      background: linear-gradient(
-        160deg,
-        #e8ebee,
-        #8e959d 45%,
-        #363a3f
-      );
-      transform: skewX(-5deg);
-      position: relative;
-      box-shadow: 0 22px 45px rgba(0,0,0,.45);
-    }
-
-    .car-shape:before {
-      content: "";
-      position: absolute;
-      width: 48%;
-      height: 80px;
-      left: 25%;
-      top: -42px;
-      border-radius: 90px 110px 10px 10px;
-      background: linear-gradient(135deg,#17202a,#64717c);
-      transform: skewX(7deg);
-      border: 2px solid rgba(255,255,255,.2);
-    }
-
-    .wheel {
-      position: absolute;
-      width: 65px;
-      height: 65px;
-      border-radius: 50%;
-      background: #090a0b;
-      border: 11px solid #25292d;
-      bottom: -28px;
-    }
-
-    .wheel.one {
-      left: 13%;
-    }
-
-    .wheel.two {
-      right: 13%;
-    }
-
-    .hero-badge {
-      position: absolute;
-      left: 22px;
-      bottom: 22px;
-      background: rgba(255,255,255,.94);
-      padding: 11px 14px;
-      border-radius: 14px;
-      font-size: 12px;
-      font-weight: 800;
-    }
-
-    section {
-      padding: 90px 22px;
-    }
-
-    .container {
-      max-width: 1180px;
-      margin: auto;
-    }
-
-    .section-head {
-      display: flex;
-      justify-content: space-between;
-      gap: 30px;
-      align-items: end;
-      margin-bottom: 34px;
-    }
-
-    .section-head h2 {
-      font-size: clamp(30px,4vw,48px);
-      line-height: 1.08;
-      letter-spacing: -2px;
-    }
-
-    .section-head p {
-      color: var(--muted);
-      max-width: 500px;
-    }
-
-    .models {
-      display: grid;
-      grid-template-columns: repeat(3,1fr);
-      gap: 18px;
-    }
-
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      overflow: hidden;
-      box-shadow: var(--shadow);
-      transition: transform .2s ease, box-shadow .2s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 25px 60px rgba(17,19,21,.12);
-    }
-
-    .car-art {
-      height: 240px;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(145deg,#eef0f2,#d7dbe0);
-      overflow: hidden;
-    }
-
-    .car-art.dark {
-      background: linear-gradient(145deg,#2a2d31,#0d0f10);
-    }
-
-    .mini-car {
-      width: 74%;
-      height: 86px;
-      border-radius: 70px 110px 28px 28px;
-      background: linear-gradient(
-        160deg,
-        #f4f5f6,
-        #9ca2a8 55%,
-        #383c40
-      );
-      position: relative;
-      box-shadow: 0 25px 35px rgba(0,0,0,.22);
-    }
-
-    .mini-car:before {
-      content: "";
-      position: absolute;
-      width: 46%;
-      height: 48px;
-      left: 27%;
-      top: -27px;
-      border-radius: 70px 80px 5px 5px;
-      background: linear-gradient(135deg,#15202a,#66727d);
-    }
-
-    .mini-car .wheel {
-      width: 38px;
-      height: 38px;
-      border-width: 7px;
-      bottom: -17px;
-    }
-
-    .mini-car .wheel.one {
-      left: 12%;
-    }
-
-    .mini-car .wheel.two {
-      right: 12%;
-    }
-
-    .truck {
-      width: 76%;
-      height: 95px;
-      border-radius: 25px 20px 12px 12px;
-      background: linear-gradient(145deg,#e5e6e7,#8e9398);
-      position: relative;
-      box-shadow: 0 25px 35px rgba(0,0,0,.35);
-    }
-
-    .truck:before {
-      content: "";
-      position: absolute;
-      right: 0;
-      top: -10px;
-      width: 38%;
-      height: 80px;
-      border-radius: 10px 22px 5px 5px;
-      background: linear-gradient(145deg,#252a2e,#6d747a);
-    }
-
-    .truck .wheel {
-      width: 43px;
-      height: 43px;
-      border-width: 8px;
-      bottom: -20px;
-    }
-
-    .truck .wheel.one {
-      left: 10%;
-    }
-
-    .truck .wheel.two {
-      right: 10%;
-    }
-
-    .card-body {
-      padding: 24px;
-    }
-
-    .card-body h3 {
-      font-size: 25px;
-      margin-bottom: 5px;
-    }
-
-    .card-body p {
-      color: var(--muted);
-      font-size: 14px;
-      margin-bottom: 18px;
-    }
-
-    .specs {
-      display: grid;
-      grid-template-columns: repeat(3,1fr);
-      gap: 10px;
-      margin-bottom: 22px;
-    }
-
-    .spec {
-      background: #f5f6f7;
-      border-radius: 13px;
-      padding: 11px;
-    }
-
-    .spec strong {
-      display: block;
-      font-size: 16px;
-    }
-
-    .spec span {
-      font-size: 11px;
-      color: var(--muted);
-    }
-
-    .card-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      color: var(--accent);
-      font-weight: 800;
-      font-size: 14px;
-    }
-
-    .trust {
-      background: #111315;
-      color: #fff;
-    }
-
-    .trust-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: center;
-    }
-
-    .trust h2 {
-      font-size: clamp(32px,4vw,52px);
-      line-height: 1.08;
-      letter-spacing: -2px;
-      margin-bottom: 16px;
-    }
-
-    .trust p {
-      color: #b8bec5;
-      max-width: 560px;
-    }
-
-    .trust-list {
-      display: grid;
-      gap: 14px;
-    }
-
-    .trust-item {
-      border: 1px solid #30343a;
-      border-radius: 17px;
-      padding: 18px;
-      background: #171a1d;
-    }
-
-    .trust-item strong {
-      display: block;
-      margin-bottom: 4px;
-    }
-
-    .trust-item span {
-      font-size: 13px;
-      color: #aab0b6;
-    }
-
-    .inquiry {
-      display: grid;
-      grid-template-columns: .85fr 1.15fr;
-      gap: 40px;
-      align-items: start;
-    }
-
-    .inquiry-copy h2 {
-      font-size: clamp(32px,4vw,52px);
-      line-height: 1.08;
-      letter-spacing: -2px;
-      margin-bottom: 16px;
-    }
-
-    .inquiry-copy p {
-      color: var(--muted);
-      margin-bottom: 22px;
-    }
-
-    .contact-points {
-      display: grid;
-      gap: 10px;
-    }
-
-    .contact-points div {
-      padding: 13px 15px;
-      background: #fff;
-      border: 1px solid var(--line);
-      border-radius: 13px;
-      font-size: 14px;
-    }
-
-    form {
-      background: #fff;
-      border: 1px solid var(--line);
-      padding: 28px;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
-    }
-
-    .field {
-      display: grid;
-      gap: 7px;
-      margin-bottom: 15px;
-    }
-
-    .field.full {
-      grid-column: 1/-1;
-    }
-
-    label {
-      font-size: 12px;
-      font-weight: 800;
-    }
-
-    input,
-    select,
-    textarea {
-      width: 100%;
-      border: 1px solid #d9dde2;
-      border-radius: 12px;
-      padding: 13px 14px;
-      outline: none;
-      background: #fff;
-    }
-
-    input:focus,
-    select:focus,
-    textarea:focus {
-      border-color: #888;
-      box-shadow: 0 0 0 3px rgba(0,0,0,.05);
-    }
-
-    textarea {
-      min-height: 125px;
-      resize: vertical;
-    }
-
-    .submit {
-      width: 100%;
-      border: 0;
-      border-radius: 12px;
-      padding: 14px;
-      background: var(--dark);
-      color: #fff;
-      font-weight: 800;
-    }
-
-    .submit:hover {
-      background: var(--accent);
-    }
-
-    .notice {
-      font-size: 11px;
-      color: #7b828a;
-      margin-top: 11px;
-      line-height: 1.5;
-    }
-
-    footer {
-      background: #0b0c0e;
-      color: #fff;
-      padding: 45px 22px;
-    }
-
-    .footer-inner {
-      max-width: 1180px;
-      margin: auto;
-      display: flex;
-      justify-content: space-between;
-      gap: 25px;
-      flex-wrap: wrap;
-    }
-
-    footer p {
-      color: #9299a1;
-      font-size: 12px;
-      max-width: 600px;
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 18px;
-      font-size: 12px;
-      color: #c8ccd0;
-    }
-
-    .footer-links a:hover {
-      color: #fff;
-    }
-
-    .toast {
-      position: fixed;
-      right: 20px;
-      bottom: 20px;
-      background: #111315;
-      color: #fff;
-      padding: 15px 18px;
-      border-radius: 14px;
-      box-shadow: 0 15px 40px rgba(0,0,0,.2);
-      transform: translateY(130px);
-      opacity: 0;
-      pointer-events: none;
-      transition: .3s ease;
-      z-index: 100;
-      font-size: 14px;
-      max-width: 330px;
-    }
-
-    .toast.show {
-      transform: translateY(0);
-      opacity: 1;
-    }
-
-    @media (max-width: 900px) {
-      .hero-inner,
-      .trust-grid,
-      .inquiry {
-        grid-template-columns: 1fr;
-      }
-
-      .models {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .hero {
-        padding-top: 55px;
-      }
-
-      .hero-visual {
-        min-height: 350px;
-      }
-    }
-
-    @media (max-width: 700px) {
-      .navlinks,
-      .nav-cta {
-        display: none;
-      }
-
-      .menu {
-        display: block;
-      }
-
-      .section-head {
-        display: block;
-      }
-
-      .section-head p {
-        margin-top: 14px;
-      }
-
-      .models {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 560px) {
-      h1 {
-        letter-spacing: -2.5px;
-      }
-
-      section {
-        padding: 65px 16px;
-      }
-
-      .hero {
-        padding-left: 16px;
-        padding-right: 16px;
-      }
-
-      .nav {
-        padding: 0 16px;
-      }
-
-      .form-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .field.full {
-        grid-column: auto;
-      }
-
-      .specs {
-        grid-template-columns: 1fr 1fr 1fr;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Tesla Deals | Drive the Future</title>
+
+<meta name="description"
+content="Explore electric vehicles, compare key details and send a vehicle inquiry.">
+
+<style>
+:root{
+  --red:#e82127;
+  --dark:#070707;
+  --muted:#666;
+  --light:#f5f5f5;
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  color:#111;
+  background:#fff;
+  line-height:1.5;
+}
+
+a{
+  text-decoration:none;
+  color:inherit;
+}
+
+/* HEADER */
+header{
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:#050505;
+  color:#fff;
+  border-bottom:1px solid #242424;
+}
+
+.nav{
+  max-width:1200px;
+  margin:auto;
+  min-height:72px;
+  padding:12px 22px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+}
+
+.logo{
+  font-size:23px;
+  font-weight:900;
+  letter-spacing:1px;
+  white-space:nowrap;
+}
+
+.logo span{
+  color:var(--red);
+}
+
+.logo small{
+  display:block;
+  color:#999;
+  font-size:9px;
+  letter-spacing:3px;
+  margin-top:-2px;
+}
+
+nav{
+  display:flex;
+  gap:26px;
+  font-size:12px;
+  font-weight:800;
+}
+
+nav a:hover{
+  color:var(--red);
+}
+
+.btn{
+  display:inline-block;
+  border:0;
+  border-radius:3px;
+  background:var(--red);
+  color:#fff;
+  padding:14px 23px;
+  font-size:12px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.btn:hover{
+  filter:brightness(1.1);
+}
+
+/* HERO */
+.hero{
+  background:
+  radial-gradient(
+    circle at 75% 30%,
+    #3b3b3b 0,
+    #181818 38%,
+    #050505 76%
+  );
+  color:#fff;
+  overflow:hidden;
+}
+
+.hero-inner{
+  max-width:1200px;
+  margin:auto;
+  min-height:585px;
+  padding:70px 22px;
+  display:grid;
+  grid-template-columns:1fr 1.1fr;
+  align-items:center;
+  gap:20px;
+}
+
+.eyebrow{
+  color:var(--red);
+  font-weight:900;
+  letter-spacing:1px;
+  margin-bottom:12px;
+}
+
+.hero h1{
+  font-size:52px;
+  line-height:1.03;
+  margin-bottom:20px;
+  letter-spacing:-1px;
+}
+
+.hero p{
+  max-width:520px;
+  color:#ddd;
+  font-size:17px;
+  margin-bottom:28px;
+}
+
+.hero-buttons{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.secondary{
+  background:transparent;
+  border:1px solid #aaa;
+}
+
+.hero-art{
+  min-height:350px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.hero-art svg{
+  width:100%;
+  max-width:650px;
+  filter:drop-shadow(0 28px 25px #000);
+}
+
+/* SECTIONS */
+.section{
+  padding:68px 22px;
+}
+
+.wrap{
+  max-width:1200px;
+  margin:auto;
+}
+
+.title{
+  text-align:center;
+  font-size:32px;
+  line-height:1.1;
+  margin-bottom:35px;
+}
+
+.title:after{
+  content:"";
+  display:block;
+  width:48px;
+  height:3px;
+  background:var(--red);
+  margin:11px auto;
+}
+
+/* VEHICLE CARDS */
+.cards{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:24px;
+}
+
+.card{
+  border:1px solid #ddd;
+  border-radius:9px;
+  overflow:hidden;
+  background:#fff;
+  box-shadow:0 10px 28px #00000012;
+}
+
+.card-art{
+  height:225px;
+  background:linear-gradient(
+    145deg,
+    #e8edf0,
+    #9ba6ad
+  );
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+
+.card-art svg{
+  width:100%;
+  height:100%;
+}
+
+.card-body{
+  padding:19px;
+}
+
+.card h3{
+  font-size:22px;
+}
+
+.price{
+  color:var(--red);
+  font-weight:900;
+  margin:4px 0 14px;
+}
+
+.specs{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  border-top:1px solid #eee;
+  padding-top:13px;
+  margin-bottom:16px;
+  text-align:center;
+  font-size:11px;
+  color:#555;
+}
+
+.specs strong{
+  display:block;
+  color:#111;
+  font-size:13px;
+}
+
+.outline{
+  display:block;
+  text-align:center;
+  border:1px solid #222;
+  border-radius:3px;
+  padding:11px;
+  font-size:12px;
+  font-weight:900;
+}
+
+.outline:hover{
+  background:#111;
+  color:#fff;
+}
+
+/* BENEFITS */
+.band{
+  background:#080808;
+  color:#fff;
+  padding:28px 22px;
+}
+
+.benefits{
+  max-width:1200px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:18px;
+}
+
+.benefit{
+  padding:8px 18px;
+  border-right:1px solid #333;
+}
+
+.benefit:last-child{
+  border-right:0;
+}
+
+.benefit strong{
+  display:block;
+  font-size:15px;
+  margin-bottom:4px;
+}
+
+.benefit span{
+  font-size:12px;
+  color:#aaa;
+}
+
+/* INQUIRY */
+.inquiry{
+  background:#f5f5f5;
+}
+
+.form{
+  max-width:760px;
+  margin:25px auto 0;
+  display:grid;
+  gap:13px;
+}
+
+.form label{
+  font-size:12px;
+  font-weight:800;
+}
+
+.form input,
+.form select,
+.form textarea{
+  width:100%;
+  margin-top:6px;
+  padding:14px;
+  border:1px solid #ccc;
+  border-radius:4px;
+  font:inherit;
+  background:#fff;
+}
+
+.form textarea{
+  min-height:125px;
+  resize:vertical;
+}
+
+.form button{
+  width:100%;
+}
+
+.hp{
+  position:absolute;
+  left:-9999px;
+  width:1px;
+  height:1px;
+  overflow:hidden;
+}
+
+.success{
+  display:none;
+  text-align:center;
+  color:#16803c;
+  font-weight:800;
+  background:#eaf7ef;
+  border:1px solid #b9e1c7;
+  padding:13px;
+  border-radius:4px;
+}
+
+.contact-box{
+  max-width:760px;
+  margin:auto;
+  text-align:center;
+  color:#555;
+}
+
+.note{
+  font-size:11px;
+  color:#777;
+  margin-top:18px;
+  text-align:center;
+}
+
+/* FOOTER */
+footer{
+  background:#050505;
+  color:#999;
+  text-align:center;
+  padding:30px 22px;
+  font-size:12px;
+}
+
+.footer-brand{
+  font-size:19px;
+  font-weight:900;
+  color:#fff;
+  margin-bottom:5px;
+}
+
+.footer-brand span{
+  color:var(--red);
+}
+
+/* MOBILE */
+@media(max-width:900px){
+
+  nav{
+    display:none;
+  }
+
+  .hero-inner{
+    grid-template-columns:1fr;
+    padding-top:55px;
+  }
+
+  .hero h1{
+    font-size:42px;
+  }
+
+  .cards,
+  .benefits{
+    grid-template-columns:1fr;
+  }
+
+  .benefit{
+    border-right:0;
+    border-bottom:1px solid #333;
+    padding:15px 0;
+  }
+
+  .hero-art{
+    min-height:260px;
+  }
+}
+
+@media(max-width:520px){
+
+  .nav{
+    padding:12px 15px;
+  }
+
+  .nav>.btn{
+    display:none;
+  }
+
+  .hero h1{
+    font-size:36px;
+  }
+
+  .section{
+    padding:52px 15px;
+  }
+}
+</style>
 </head>
 
 <body>
 
-  <div class="topbar">
-    Electric vehicles • Browse models • Request information
-  </div>
+<!-- HEADER -->
+<header>
 
-  <header>
-    <nav class="nav">
+<div class="nav">
 
-      <a class="brand" href="#top" aria-label="Tesla Deals home">
-        <span class="brand-mark">T</span>
-        <span>Tesla Deals</span>
-      </a>
+<a class="logo" href="#home">
+TESLA <span>DEALS</span>
+<small>DRIVE THE FUTURE</small>
+</a>
 
-      <div class="navlinks">
-        <a href="#models">Vehicles</a>
-        <a href="#why">Why electric</a>
-        <a href="#inquiry">Contact</a>
-      </div>
+<nav>
+<a href="#home">HOME</a>
+<a href="#vehicles">VEHICLES</a>
+<a href="#why">WHY US</a>
+<a href="#faq">FAQ</a>
+<a href="#contact">CONTACT</a>
+</nav>
 
-      <a class="nav-cta" href="#inquiry">
-        Request information
-      </a>
+<a class="btn" href="#inquiry">
+INQUIRE NOW
+</a>
 
-      <button
-        class="menu"
-        aria-label="Open menu"
-        onclick="toggleMenu()">
-        ☰
-      </button>
+</div>
 
-    </nav>
-  </header>
+</header>
 
-  <main id="top">
 
-    <section class="hero">
+<main>
 
-      <div class="hero-inner">
+<!-- HERO -->
+<section class="hero" id="home">
 
-        <div>
+<div class="hero-inner">
+
+<div>
 
-          <div class="eyebrow">
-            Electric mobility
-          </div>
+<div class="eyebrow">
+PREMIUM ELECTRIC VEHICLES
+</div>
+
+<h1>
+EXPERIENCE INNOVATION.<br>
+DRIVE THE FUTURE.
+</h1>
+
+<p>
+Explore electric vehicles through a clean,
+modern buying experience. Browse models,
+review key details and send an inquiry to our team.
+</p>
+
+<div class="hero-buttons">
+
+<a class="btn" href="#vehicles">
+BROWSE VEHICLES
+</a>
+
+<a class="btn secondary" href="#inquiry">
+SEND AN INQUIRY
+</a>
+
+</div>
+
+</div>
+
+
+<!-- ORIGINAL HERO VEHICLE PICTURE -->
+<div class="hero-art">
+
+<svg
+viewBox="0 0 760 380"
+role="img"
+aria-label="Original red electric sedan illustration">
+
+<defs>
+
+<linearGradient
+id="redBody"
+x1="0"
+x2="1"
+y1="0"
+y2="1">
+
+<stop offset="0" stop-color="#ff4b53"/>
+<stop offset=".55" stop-color="#d51019"/>
+<stop offset="1" stop-color="#710008"/>
+
+</linearGradient>
+
+<linearGradient
+id="glass"
+x1="0"
+x2="1">
+
+<stop stop-color="#7ea6b7"/>
+<stop offset=".55" stop-color="#18232b"/>
+<stop offset="1" stop-color="#050709"/>
+
+</linearGradient>
+
+</defs>
+
+<ellipse
+cx="390"
+cy="322"
+rx="305"
+ry="28"
+fill="#000"
+opacity=".45"/>
+
+<path
+d="M110 275
+C130 220 205 210 270 202
+L330 145
+C350 124 390 112 445 115
+L555 130
+C602 136 646 169 674 218
+L704 260
+C720 282 701 302 665 302
+L145 302
+C111 302 96 293 110 275Z"
+fill="url(#redBody)"/>
+
+<path
+d="M283 202
+L337 151
+C355 134 385 127 426 128
+L531 141
+C566 146 593 164 612 193
+L622 207Z"
+fill="url(#glass)"
+stroke="#59656c"
+stroke-width="3"/>
+
+<path
+d="M423 130 L429 201"
+stroke="#777"
+stroke-width="3"
+opacity=".55"/>
+
+<path
+d="M171 254
+Q285 225 570 226"
+stroke="#ff9da1"
+stroke-width="3"
+opacity=".45"
+fill="none"/>
+
+<path
+d="M646 222
+L693 244
+L700 265
+L655 266Z"
+fill="#eefaff"
+opacity=".8"/>
+
+<circle
+cx="200"
+cy="294"
+r="48"
+fill="#080808"
+stroke="#444"
+stroke-width="9"/>
+
+<circle
+cx="200"
+cy="294"
+r="18"
+fill="#777"/>
+
+<circle
+cx="610"
+cy="294"
+r="48"
+fill="#080808"
+stroke="#444"
+stroke-width="9"/>
+
+<circle
+cx="610"
+cy="294"
+r="18"
+fill="#777"/>
+
+<path
+d="M127 274 L166 274"
+stroke="#fff"
+stroke-width="7"
+stroke-linecap="round"
+opacity=".9"/>
+
+<path
+d="M669 276 L697 276"
+stroke="#fff"
+stroke-width="7"
+stroke-linecap="round"
+opacity=".9"/>
+
+</svg>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- VEHICLES -->
+<section class="section" id="vehicles">
+
+<div class="wrap">
+
+<h2 class="title">
+BROWSE OUR VEHICLES
+</h2>
+
+
+<div class="cards">
+
+
+<!-- MODEL 3 -->
+<article class="card">
+
+<div class="card-art">
+
+<svg
+viewBox="0 0 520 225"
+aria-label="Original white electric sedan illustration">
+
+<defs>
+
+<linearGradient
+id="m3body"
+x1="0"
+x2="1">
+
+<stop stop-color="#fff"/>
+<stop offset=".7" stop-color="#c8cdd1"/>
+<stop offset="1" stop-color="#858c91"/>
+
+</linearGradient>
+
+</defs>
+
+<rect
+width="520"
+height="225"
+fill="#dce7ee"/>
+
+<path
+d="M55 162
+Q90 120 170 116
+L220 80
+Q240 65 285 66
+L360 76
+Q410 83 446 126
+L467 151
+Q480 167 455 177
+L75 177
+Q48 176 55 162Z"
+fill="url(#m3body)"/>
+
+<path
+d="M184 116
+L228 82
+Q243 72 276 72
+L349 81
+Q383 86 405 115Z"
+fill="#1b2a33"/>
+
+<circle
+cx="135"
+cy="173"
+r="31"
+fill="#111"
+stroke="#555"
+stroke-width="7"/>
+
+<circle
+cx="135"
+cy="173"
+r="11"
+fill="#777"/>
+
+<circle
+cx="395"
+cy="173"
+r="31"
+fill="#111"
+stroke="#555"
+stroke-width="7"/>
+
+<circle
+cx="395"
+cy="173"
+r="11"
+fill="#777"/>
+
+</svg>
+
+</div>
+
+<div class="card-body">
+
+<h3>MODEL 3</h3>
+
+<div class="price">
+Starting at $38,990
+</div>
+
+<div class="specs">
+
+<div>
+<strong>358 mi</strong>
+Range
+</div>
+
+<div>
+<strong>5.8 sec</strong>
+0–60 mph
+</div>
+
+<div>
+<strong>5</strong>
+Seats
+</div>
+
+</div>
+
+<a
+class="outline"
+href="#inquiry"
+onclick="selectVehicle('Model 3')">
+
+VIEW DETAILS
+
+</a>
+
+</div>
+
+</article>
+
+
+<!-- MODEL Y -->
+<article class="card">
+
+<div class="card-art">
+
+<svg
+viewBox="0 0 520 225"
+aria-label="Original dark electric SUV illustration">
+
+<defs>
+
+<linearGradient
+id="mybody"
+x1="0"
+x2="1">
+
+<stop stop-color="#59636a"/>
+<stop offset=".55" stop-color="#252b2f"/>
+<stop offset="1" stop-color="#090a0b"/>
+
+</linearGradient>
+
+</defs>
+
+<rect
+width="520"
+height="225"
+fill="#9daab0"/>
+
+<path
+d="M50 160
+Q82 116 158 111
+L208 69
+Q231 53 278 56
+L359 68
+Q410 76 448 123
+L470 151
+Q482 169 452 178
+L71 178
+Q45 177 50 160Z"
+fill="url(#mybody)"/>
+
+<path
+d="M174 111
+L220 71
+Q235 60 272 61
+L348 72
+Q383 77 408 111Z"
+fill="#172229"/>
+
+<circle
+cx="132"
+cy="173"
+r="31"
+fill="#090909"
+stroke="#555"
+stroke-width="7"/>
+
+<circle
+cx="132"
+cy="173"
+r="11"
+fill="#777"/>
+
+<circle
+cx="397"
+cy="173"
+r="31"
+fill="#090909"
+stroke="#555"
+stroke-width="7"/>
+
+<circle
+cx="397"
+cy="173"
+r="11"
+fill="#777"/>
+
+</svg>
+
+</div>
+
+<div class="card-body">
+
+<h3>MODEL Y</h3>
+
+<div class="price">
+Starting at $44,990
+</div>
+
+<div class="specs">
+
+<div>
+<strong>330 mi</strong>
+Range
+</div>
+
+<div>
+<strong>4.8 sec</strong>
+0–60 mph
+</div>
+
+<div>
+<strong>5</strong>
+Seats
+</div>
+
+</div>
+
+<a
+class="outline"
+href="#inquiry"
+onclick="selectVehicle('Model Y')">
+
+VIEW DETAILS
+
+</a>
+
+</div>
+
+</article>
+
+
+<!-- CYBERTRUCK -->
+<article class="card">
+
+<div class="card-art">
+
+<svg
+viewBox="0 0 520 225"
+aria-label="Original angular electric pickup illustration">
+
+<defs>
+
+<linearGradient
+id="cybody"
+x1="0"
+x2="1">
+
+<stop stop-color="#f4f6f7"/>
+<stop offset=".5" stop-color="#aab1b5"/>
+<stop offset="1" stop-color="#555b5f"/>
+
+</linearGradient>
+
+</defs>
+
+<rect
+width="520"
+height="225"
+fill="#aeb4b8"/>
+
+<polygon
+points="48,167 93,122 205,91 359,88 452,116 484,166 456,181 68,181"
+fill="url(#cybody)"/>
+
+<polygon
+points="205,91 251,58 365,67 410,116 170,116"
+fill="#252c30"/>
+
+<line
+x1="251"
+y1="58"
+x2="267"
+y2="115"
+stroke="#777"
+stroke-width="3"/>
+
+<circle
+cx="145"
+cy="174"
+r="31"
+fill="#0a0a0a"
+stroke="#555"
+stroke-width="7"/>
+
+<circle
+cx="145"
+cy="174"
+r="11"
+fill="#777"/>
+
+<circle
+cx="406"
+cy="174"
+r="31"
+fill="#0a0a0a"
+stroke="#555"
+stroke-width="7"/>
+
+<circle
+cx="406"
+cy="174"
+r="11"
+fill="#777"/>
+
+</svg>
+
+</div>
+
+<div class="card-body">
+
+<h3>CYBERTRUCK</h3>
 
-          <h1>
-            Find the Tesla that fits your drive.
-          </h1>
+<div class="price">
+Starting at $60,990
+</div>
+
+<div class="specs">
+
+<div>
+<strong>340 mi</strong>
+Range
+</div>
+
+<div>
+<strong>2.9 sec</strong>
+0–60 mph
+</div>
+
+<div>
+<strong>6</strong>
+Seats
+</div>
+
+</div>
+
+<a
+class="outline"
+href="#inquiry"
+onclick="selectVehicle('Cybertruck')">
+
+VIEW DETAILS
 
-          <p class="hero-copy">
-            Explore selected Tesla vehicles, compare key specifications
-            and send an inquiry to the customer team. A clean, simple
-            experience built for customers.
-          </p>
+</a>
 
-          <div class="actions">
+</div>
 
-            <a
-              class="btn btn-primary"
-              href="#models">
-              Explore vehicles
-            </a>
+</article>
 
-            <a
-              class="btn btn-secondary"
-              href="#inquiry">
-              Ask a question
-            </a>
+</div>
 
-          </div>
+</div>
 
-        </div>
+</section>
 
-        <div
-          class="hero-visual"
-          aria-label="Electric vehicle visual">
 
-          <div class="car-shape">
+<!-- WHY US -->
+<section class="band" id="why">
 
-            <div class="wheel one"></div>
-            <div class="wheel two"></div>
+<div class="benefits">
 
-          </div>
+<div class="benefit">
+<strong>Safety First</strong>
+<span>
+Designed around confidence and protection.
+</span>
+</div>
 
-          <div class="hero-badge">
-            Premium electric driving
-          </div>
+<div class="benefit">
+<strong>Sustainable Future</strong>
+<span>
+Electric mobility for a cleaner future.
+</span>
+</div>
 
-        </div>
+<div class="benefit">
+<strong>Fast Charging</strong>
+<span>
+Convenient charging for everyday journeys.
+</span>
+</div>
 
-      </div>
+<div class="benefit">
+<strong>Advanced Technology</strong>
+<span>
+Modern software and connected features.
+</span>
+</div>
 
-    </section>
+</div>
 
+</section>
 
-    <section id="models">
 
-      <div class="container">
+<!-- INQUIRY -->
+<section class="section inquiry" id="inquiry">
 
-        <div class="section-head">
+<div class="wrap">
 
-          <h2>
-            Explore vehicles
-          </h2>
+<h2 class="title">
+READY TO DRIVE THE FUTURE?
+</h2>
 
-          <p>
-            Browse a simple selection of popular Tesla models.
-            Specifications and availability can change, so customers
-            can request the latest details before making a decision.
-          </p>
+<div class="contact-box">
 
-        </div>
+<p>
+Send your vehicle inquiry and the team can review your request.
+</p>
 
+</div>
 
-        <div class="models">
 
+<!-- NETLIFY FORM -->
+<form
+class="form"
+name="vehicle-inquiry"
+method="POST"
+data-netlify="true"
+data-netlify-honeypot="bot-field"
+id="inquiryForm">
 
-          <!-- MODEL 3 -->
+<input
+type="hidden"
+name="form-name"
+value="vehicle-inquiry">
 
-          <article class="card">
+<input
+type="hidden"
+name="subject"
+value="New vehicle inquiry">
 
-            <div class="car-art">
 
-              <div class="mini-car">
+<!-- SPAM PROTECTION -->
+<p class="hp">
 
-                <div class="wheel one"></div>
-                <div class="wheel two"></div>
+<label>
+Don't fill this out if you're human:
 
-              </div>
+<input
+name="bot-field"
+type="text">
 
-            </div>
+</label>
 
-            <div class="card-body">
+</p>
 
-              <h3>
-                Model 3
-              </h3>
 
-              <p>
-                Sport sedan designed for efficiency, comfort and
-                everyday driving.
-              </p>
+<label>
+Full name
 
-              <div class="specs">
+<input
+name="name"
+type="text"
+required
+placeholder="Your full name">
 
-                <div class="spec">
-                  <strong>363 mi</strong>
-                  <span>max EPA est. range</span>
-                </div>
+</label>
 
-                <div class="spec">
-                  <strong>5</strong>
-                  <span>seats</span>
-                </div>
 
-                <div class="spec">
-                  <strong>2.9 s</strong>
-                  <span>0–60 mph</span>
-                </div>
+<label>
+Email address
 
-              </div>
+<input
+name="email"
+type="email"
+required
+placeholder="you@example.com">
 
-              <a
-                class="card-link"
-                href="#inquiry"
-                onclick="selectVehicle('Model 3')">
-                Request details →
-              </a>
+</label>
 
-            </div>
 
-          </article>
+<label>
+Phone number
 
+<input
+name="phone"
+type="tel"
+placeholder="+1 ...">
 
-          <!-- MODEL Y -->
+</label>
 
-          <article class="card">
 
-            <div class="car-art dark">
+<label>
+Vehicle
 
-              <div class="mini-car">
+<select
+name="vehicle"
+id="vehicle">
 
-                <div class="wheel one"></div>
-                <div class="wheel two"></div>
+<option value="">
+Select a vehicle
+</option>
 
-              </div>
+<option>
+Model 3
+</option>
 
-            </div>
+<option>
+Model Y
+</option>
 
-            <div class="card-body">
+<option>
+Cybertruck
+</option>
 
-              <h3>
-                Model Y
-              </h3>
+</select>
 
-              <p>
-                Versatile electric SUV with generous cargo space
-                and available performance options.
-              </p>
+</label>
 
-              <div class="specs">
 
-                <div class="spec">
-                  <strong>327 mi</strong>
-                  <span>max EPA est. range</span>
-                </div>
+<label>
+Your inquiry
 
-                <div class="spec">
-                  <strong>7</strong>
-                  <span>up to seats</span>
-                </div>
+<textarea
+name="message"
+required
+placeholder="Tell us what you would like to know...">
+</textarea>
 
-                <div class="spec">
-                  <strong>4.6 s</strong>
-                  <span>0–60 mph</span>
-                </div>
+</label>
 
-              </div>
 
-              <a
-                class="card-link"
-                href="#inquiry"
-                onclick="selectVehicle('Model Y')">
-                Request details →
-              </a>
+<button
+class="btn"
+type="submit">
 
-            </div>
+SUBMIT INQUIRY
 
-          </article>
+</button>
 
 
-          <!-- CYBERTRUCK -->
+<div
+class="success"
+id="success">
 
-          <article class="card">
+Thank you. Your inquiry has been submitted successfully.
 
-            <div class="car-art">
+</div>
 
-              <div class="truck">
+</form>
 
-                <div class="wheel one"></div>
-                <div class="wheel two"></div>
 
-              </div>
+<p class="note">
 
-            </div>
+Vehicle specifications and pricing shown here are example
+website content and should be verified before public commercial use.
 
-            <div class="card-body">
+</p>
 
-              <h3>
-                Cybertruck
-              </h3>
+</div>
 
-              <p>
-                All-electric utility truck built around distinctive
-                design and high capability.
-              </p>
+</section>
 
-              <div class="specs">
 
-                <div class="spec">
-                  <strong>325 mi</strong>
-                  <span>EPA est. range</span>
-                </div>
+<!-- FAQ -->
+<section class="section" id="faq">
 
-                <div class="spec">
-                  <strong>5</strong>
-                  <span>seats</span>
-                </div>
+<div class="wrap">
 
-                <div class="spec">
-                  <strong>11,000 lb</strong>
-                  <span>max towing</span>
-                </div>
+<h2 class="title">
+FAQ
+</h2>
 
-              </div>
+<div class="contact-box">
 
-              <a
-                class="card-link"
-                href="#inquiry"
-                onclick="selectVehicle('Cybertruck')">
-                Request details →
-              </a>
+<p>
+<strong>
+How do I ask about a vehicle?
+</strong>
+<br>
 
-            </div>
+Choose a vehicle above or select one in the inquiry form,
+then send your request.
 
-          </article>
+</p>
 
-        </div>
+<br>
 
-      </div>
+<p>
+<strong>
+Where do inquiries go?
+</strong>
+<br>
 
-    </section>
+With Netlify Forms enabled, submissions are collected
+in the site's Netlify dashboard. Email notifications
+can be configured there for the approved business email.
 
+</p>
 
-    <!-- WHY SECTION -->
+</div>
 
-    <section id="why" class="trust">
+</div>
 
-      <div class="container trust-grid">
+</section>
 
-        <div>
+</main>
 
-          <div class="eyebrow">
-            Customer experience
-          </div>
 
-          <h2>
-            Simple information. Clear next steps.
-          </h2>
+<!-- FOOTER -->
+<footer id="contact">
 
-          <p>
-            The site is designed to help visitors understand the
-            vehicles without overwhelming them. Customers can review
-            the basics and contact the team for current pricing,
-            inventory, financing or delivery information.
-          </p>
+<div class="footer-brand">
 
-        </div>
+TESLA <span>DEALS</span>
 
+</div>
 
-        <div class="trust-list">
+<p>
+Professional vehicle information and inquiry website.
+</p>
 
-          <div class="trust-item">
+<p style="margin-top:10px">
 
-            <strong>
-              Clear vehicle information
-            </strong>
+Privacy Policy
+&nbsp;|&nbsp;
+Terms of Service
+&nbsp;|&nbsp;
+Contact
 
-            <span>
-              Key range, seating and performance information
-              is easy to scan.
-            </span>
+</p>
 
-          </div>
+</footer>
 
 
-          <div class="trust-item">
+<script>
 
-            <strong>
-              Customer-first inquiries
-            </strong>
+/* SELECT VEHICLE */
+function selectVehicle(vehicle){
 
-            <span>
-              Visitors can choose a vehicle and send a question
-              directly through the inquiry form.
-            </span>
+  document.getElementById("vehicle").value=vehicle;
 
-          </div>
+  document
+    .getElementById("inquiry")
+    .scrollIntoView({
+      behavior:"smooth"
+    });
 
+}
 
-          <div class="trust-item">
 
-            <strong>
-              Mobile-ready design
-            </strong>
+/* NETLIFY FORM SUBMISSION */
+const form =
+document.getElementById("inquiryForm");
 
-            <span>
-              Works on phones, tablets and desktop screens
-              without paid software.
-            </span>
+form.addEventListener(
+"submit",
+function(event){
 
-          </div>
+  event.preventDefault();
 
-        </div>
+  const data =
+  new URLSearchParams(
+    new FormData(form)
+  ).toString();
 
-      </div>
+  fetch("/",{
 
-    </section>
+    method:"POST",
 
+    headers:{
+      "Content-Type":
+      "application/x-www-form-urlencoded"
+    },
 
-    <!-- INQUIRY SECTION -->
+    body:data
 
-    <section id="inquiry">
+  })
 
-      <div class="container inquiry">
+  .then(function(response){
 
+    if(!response.ok){
 
-        <div class="inquiry-copy">
-
-          <div class="eyebrow">
-            Get in touch
-          </div>
-
-          <h2>
-            Have a vehicle in mind?
-          </h2>
-
-          <p>
-            Send an inquiry and the customer team can follow up
-            with the latest availability, pricing and vehicle
-            information.
-          </p>
-
-
-          <div class="contact-points">
-
-            <div>
-              ✓ Vehicle availability questions
-            </div>
-
-            <div>
-              ✓ Pricing and configuration requests
-            </div>
-
-            <div>
-              ✓ Test-drive or appointment requests
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <!-- FORM -->
-
-        <form id="inquiryForm">
-
-          <div class="form-grid">
-
-
-            <div class="field">
-
-              <label for="name">
-                Full name
-              </label>
-
-              <input
-                id="name"
-                name="name"
-                required
-                placeholder="Your name">
-
-            </div>
-
-
-            <div class="field">
-
-              <label for="email">
-                Email address
-              </label>
-
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                placeholder="you@example.com">
-
-            </div>
-
-
-            <div class="field">
-
-              <label for="phone">
-                Phone (optional)
-              </label>
-
-              <input
-                id="phone"
-                name="phone"
-                placeholder="+1 ...">
-
-            </div>
-
-
-            <div class="field">
-
-              <label for="vehicle">
-                Vehicle
-              </label>
-
-              <select
-                id="vehicle"
-                name="vehicle">
-
-                <option>
-                  Model 3
-                </option>
-
-                <option>
-                  Model Y
-                </option>
-
-                <option>
-                  Cybertruck
-                </option>
-
-                <option>
-                  General inquiry
-                </option>
-
-              </select>
-
-            </div>
-
-
-            <div class="field full">
-
-              <label for="message">
-                Message
-              </label>
-
-              <textarea
-                id="message"
-                name="message"
-                required
-                placeholder="Tell us what you'd like to know..."></textarea>
-
-            </div>
-
-          </div>
-
-
-          <button
-            class="submit"
-            type="submit">
-            Send inquiry
-          </button>
-
-
-          <p class="notice">
-            Demo form: this free version shows a confirmation in
-            the browser. To receive real customer messages, connect
-            this form to an approved business email or form service
-            later.
-          </p>
-
-        </form>
-
-      </div>
-
-    </section>
-
-  </main>
-
-
-  <!-- FOOTER -->
-
-  <footer>
-
-    <div class="footer-inner">
-
-      <div>
-
-        <div class="brand">
-
-          <span class="brand-mark">
-            T
-          </span>
-
-          <span>
-            Tesla Deals
-          </span>
-
-        </div>
-
-        <p style="margin-top:12px">
-
-          Customer vehicle information portal.
-          Replace this text with the company's approved legal,
-          contact and privacy information before public launch.
-
-        </p>
-
-      </div>
-
-
-      <div class="footer-links">
-
-        <a href="#models">
-          Vehicles
-        </a>
-
-        <a href="#inquiry">
-          Contact
-        </a>
-
-        <a href="#top">
-          Back to top
-        </a>
-
-      </div>
-
-    </div>
-
-  </footer>
-
-
-  <!-- NOTIFICATION -->
-
-  <div
-    id="toast"
-    class="toast">
-    Your inquiry has been prepared.
-  </div>
-
-
-  <!-- JAVASCRIPT -->
-
-  <script>
-
-    function selectVehicle(vehicle) {
-
-      document.getElementById("vehicle").value = vehicle;
-
-    }
-
-
-    function toggleMenu() {
-
-      const links =
-        document.querySelector(".navlinks");
-
-      if (!links) return;
-
-      const visible =
-        links.style.display === "flex";
-
-      links.style.display =
-        visible ? "" : "flex";
-
-      links.style.position =
-        "absolute";
-
-      links.style.top =
-        "72px";
-
-      links.style.left =
-        "0";
-
-      links.style.right =
-        "0";
-
-      links.style.background =
-        "#fff";
-
-      links.style.padding =
-        "18px 22px";
-
-      links.style.flexDirection =
-        "column";
-
-      links.style.borderBottom =
-        "1px solid #e5e7eb";
-
-    }
-
-
-    document
-      .getElementById("inquiryForm")
-      .addEventListener(
-        "submit",
-        function(e) {
-
-          e.preventDefault();
-
-          const name =
-            document
-              .getElementById("name")
-              .value
-              .trim();
-
-          const vehicle =
-            document
-              .getElementById("vehicle")
-              .value;
-
-          if (!name) return;
-
-
-          const toast =
-            document.getElementById("toast");
-
-
-          toast.textContent =
-            "Thanks, " +
-            name +
-            ". Your " +
-            vehicle +
-            " inquiry is ready.";
-
-
-          toast.classList.add("show");
-
-
-          setTimeout(
-            () => toast.classList.remove("show"),
-            4500
-          );
-
-
-          this.reset();
-
-        }
+      throw new Error(
+        "Submission failed"
       );
 
-  </script>
+    }
+
+    form.reset();
+
+    document
+      .getElementById("success")
+      .style.display="block";
+
+  })
+
+  .catch(function(){
+
+    alert(
+      "The inquiry could not be submitted yet. Please try again after the site has finished deploying."
+    );
+
+  });
+
+});
+
+</script>
 
 </body>
 </html>
