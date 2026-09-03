@@ -4,23 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Tesla Deals | Explore Electric Vehicles</title>
+  <title>Tesla Deals | Electric Vehicles & Vehicle Inquiries</title>
 
   <meta
     name="description"
-    content="Explore Tesla vehicles, compare models and submit a vehicle inquiry."
+    content="Tesla Deals — explore selected Tesla vehicles, review available information and submit a vehicle inquiry."
   >
+
+  <meta name="theme-color" content="#050505">
 
   <style>
     :root {
       --red: #e82127;
+      --red-dark: #b91419;
       --black: #050505;
-      --dark: #111111;
-      --gray: #666666;
+      --dark: #0d0d0d;
+      --dark-2: #151515;
+      --gray: #686868;
       --light: #f5f5f5;
-      --white: #ffffff;
       --line: #e5e5e5;
-      --shadow: 0 18px 50px rgba(0,0,0,.10);
+      --white: #ffffff;
+      --shadow: 0 20px 60px rgba(0,0,0,.10);
+      --radius: 22px;
     }
 
     * {
@@ -35,12 +40,20 @@
 
     body {
       font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
         Arial,
         Helvetica,
         sans-serif;
       color: #111;
       background: #fff;
-      line-height: 1.5;
+      line-height: 1.55;
+    }
+
+    body.menu-open {
+      overflow: hidden;
     }
 
     a {
@@ -60,6 +73,15 @@
       font: inherit;
     }
 
+    button {
+      cursor: pointer;
+    }
+
+    .container {
+      width: min(1180px, 92%);
+      margin: auto;
+    }
+
     /* =========================
        HEADER
     ========================= */
@@ -68,16 +90,14 @@
       position: sticky;
       top: 0;
       z-index: 1000;
-      background: rgba(0,0,0,.96);
+      background: rgba(5,5,5,.96);
+      backdrop-filter: blur(14px);
       color: #fff;
-      border-bottom: 1px solid #252525;
+      border-bottom: 1px solid rgba(255,255,255,.08);
     }
 
     .nav {
-      width: min(1180px, 92%);
       min-height: 72px;
-      margin: auto;
-
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -86,8 +106,9 @@
 
     .logo {
       font-size: 20px;
-      font-weight: 900;
+      font-weight: 950;
       letter-spacing: 2px;
+      white-space: nowrap;
     }
 
     .logo span {
@@ -98,21 +119,31 @@
       display: flex;
       align-items: center;
       gap: 28px;
-
       font-size: 14px;
-      font-weight: 700;
+      font-weight: 750;
+    }
+
+    .navlinks a {
+      transition: .2s ease;
     }
 
     .navlinks a:hover {
-      color: #cccccc;
+      color: #ccc;
     }
 
     .nav-button {
       background: var(--red);
-      color: #fff;
-
+      color: #fff !important;
       padding: 11px 19px;
       border-radius: 30px;
+    }
+
+    .mobile-menu {
+      display: none;
+      background: transparent;
+      color: #fff;
+      border: 0;
+      font-size: 26px;
     }
 
     /* =========================
@@ -120,58 +151,47 @@
     ========================= */
 
     .hero {
-      min-height: 680px;
-
+      min-height: 700px;
       position: relative;
       overflow: hidden;
-
       background:
         linear-gradient(
           90deg,
-          rgba(0,0,0,.90),
-          rgba(0,0,0,.58),
-          rgba(0,0,0,.20)
+          rgba(0,0,0,.94),
+          rgba(0,0,0,.68),
+          rgba(0,0,0,.25)
         ),
-        url("https://commons.wikimedia.org/wiki/Special:Redirect/file/Tesla_Model_Y.jpg")
+        url("https://images.unsplash.com/photo-1619767886558-efdc259cde1a?auto=format&fit=crop&w=1800&q=85")
         center / cover no-repeat;
-
       color: #fff;
-
       display: flex;
       align-items: center;
     }
 
-    .hero::after {
+    .hero::before {
       content: "";
       position: absolute;
       inset: 0;
-
       background:
         linear-gradient(
           to top,
-          rgba(0,0,0,.55),
-          transparent 45%
+          rgba(0,0,0,.70),
+          transparent 55%
         );
     }
 
     .hero-content {
       position: relative;
       z-index: 2;
-
-      width: min(1180px, 92%);
-      margin: auto;
-
-      padding: 100px 0;
+      padding: 105px 0;
     }
 
     .eyebrow {
       color: var(--red);
-
       font-size: 12px;
       font-weight: 900;
       letter-spacing: 3px;
       text-transform: uppercase;
-
       margin-bottom: 15px;
     }
 
@@ -180,12 +200,10 @@
     }
 
     .hero h1 {
-      max-width: 780px;
-
-      font-size: clamp(48px, 7vw, 88px);
+      max-width: 850px;
+      font-size: clamp(48px, 7vw, 90px);
       line-height: .94;
       letter-spacing: -5px;
-
       margin-bottom: 25px;
     }
 
@@ -194,11 +212,9 @@
     }
 
     .hero p {
-      max-width: 600px;
-
-      color: #dddddd;
+      max-width: 610px;
+      color: #ddd;
       font-size: 18px;
-
       margin-bottom: 32px;
     }
 
@@ -209,20 +225,14 @@
     }
 
     .btn {
-      min-height: 49px;
-
+      min-height: 50px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-
       padding: 0 24px;
-
       border-radius: 30px;
       border: 1px solid transparent;
-
-      font-weight: 800;
-
-      cursor: pointer;
+      font-weight: 850;
       transition: .2s ease;
     }
 
@@ -233,6 +243,10 @@
     .btn-red {
       background: var(--red);
       color: #fff;
+    }
+
+    .btn-red:hover {
+      background: var(--red-dark);
     }
 
     .btn-white {
@@ -246,27 +260,22 @@
     }
 
     /* =========================
-       TRUST BAR
+       TRUST
     ========================= */
 
     .trust {
-      background: #070707;
+      background: var(--black);
       color: #fff;
     }
 
     .trust-grid {
-      width: min(1100px, 92%);
-      margin: auto;
-
       display: grid;
       grid-template-columns: repeat(3, 1fr);
     }
 
     .trust-item {
       text-align: center;
-
-      padding: 25px 15px;
-
+      padding: 26px 15px;
       border-right: 1px solid #252525;
     }
 
@@ -276,7 +285,7 @@
 
     .trust-item strong {
       display: block;
-      margin-bottom: 4px;
+      margin-bottom: 5px;
     }
 
     .trust-item span {
@@ -285,29 +294,28 @@
     }
 
     /* =========================
-       GENERAL SECTION
+       SECTIONS
     ========================= */
 
     .section {
-      width: min(1180px, 92%);
-      margin: auto;
+      padding: 95px 0;
+    }
 
-      padding: 90px 0;
+    .section-light {
+      background: var(--light);
     }
 
     .heading {
-      max-width: 720px;
-      margin: 0 auto 45px;
-
+      max-width: 740px;
+      margin: 0 auto 48px;
       text-align: center;
     }
 
     .heading h2 {
-      font-size: clamp(38px, 5vw, 58px);
+      font-size: clamp(38px, 5vw, 60px);
       line-height: 1;
       letter-spacing: -3px;
-
-      margin-bottom: 15px;
+      margin-bottom: 16px;
     }
 
     .heading p {
@@ -316,7 +324,7 @@
     }
 
     /* =========================
-       VEHICLE CARDS
+       VEHICLES
     ========================= */
 
     .vehicle-grid {
@@ -327,20 +335,15 @@
 
     .vehicle-card {
       overflow: hidden;
-
       background: #fff;
-
       border: 1px solid var(--line);
-      border-radius: 22px;
-
+      border-radius: var(--radius);
       box-shadow: var(--shadow);
-
       transition: .25s ease;
     }
 
     .vehicle-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 24px 65px rgba(0,0,0,.14);
     }
 
     .vehicle-card.featured {
@@ -348,20 +351,15 @@
     }
 
     .vehicle-image {
-      height: 360px;
-
+      height: 350px;
       position: relative;
       overflow: hidden;
-
-      background: #eeeeee;
+      background: #171717;
     }
 
     .vehicle-image img {
-      width: 100%;
       height: 100%;
-
       object-fit: cover;
-
       transition: transform .5s ease;
     }
 
@@ -373,26 +371,21 @@
       position: absolute;
       left: 18px;
       bottom: 18px;
-
       padding: 8px 14px;
-
       border-radius: 20px;
-
       background: rgba(0,0,0,.82);
       color: #fff;
-
       font-size: 11px;
       font-weight: 900;
       letter-spacing: 1.5px;
     }
 
     .vehicle-body {
-      padding: 27px;
+      padding: 28px;
     }
 
     .vehicle-category {
       color: #777;
-
       font-size: 11px;
       font-weight: 900;
       letter-spacing: 2px;
@@ -400,8 +393,8 @@
     }
 
     .vehicle-body h3 {
-      font-size: 36px;
-      margin: 4px 0 7px;
+      font-size: 38px;
+      margin: 4px 0 8px;
     }
 
     .vehicle-body p {
@@ -412,18 +405,14 @@
     .spec-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-
       border-top: 1px solid var(--line);
       border-bottom: 1px solid var(--line);
-
       margin-bottom: 22px;
     }
 
     .spec {
       padding: 15px 7px;
-
       text-align: center;
-
       border-right: 1px solid var(--line);
     }
 
@@ -433,7 +422,7 @@
 
     .spec strong {
       display: block;
-      font-size: 17px;
+      font-size: 16px;
     }
 
     .spec span {
@@ -451,59 +440,107 @@
     }
 
     /* =========================
-       FEATURE SECTION
+       FEATURED
     ========================= */
 
-    .feature-band {
-      background: var(--light);
-    }
-
-    .feature-grid {
-      width: min(1180px, 92%);
-      margin: auto;
-
-      padding: 90px 0;
-
+    .featured-wrap {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 60px;
-
-      align-items: center;
+      gap: 25px;
     }
 
-    .feature-image {
-      min-height: 450px;
-
+    .featured-card {
       overflow: hidden;
-
-      border-radius: 25px;
-
+      border-radius: var(--radius);
       background: #111;
-
-      box-shadow: var(--shadow);
+      color: #fff;
+      min-height: 390px;
+      position: relative;
     }
 
-    .feature-image img {
+    .featured-card img {
+      position: absolute;
+      inset: 0;
       width: 100%;
       height: 100%;
-
-      min-height: 450px;
-
       object-fit: cover;
+      opacity: .72;
     }
 
-    .feature-content h2 {
-      font-size: clamp(38px, 5vw, 60px);
-      line-height: 1;
-      letter-spacing: -3px;
+    .featured-overlay {
+      position: relative;
+      z-index: 2;
+      min-height: 390px;
+      padding: 34px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      background:
+        linear-gradient(
+          to top,
+          rgba(0,0,0,.92),
+          rgba(0,0,0,.05)
+        );
+    }
 
+    .featured-overlay h3 {
+      font-size: 35px;
+      line-height: 1;
+      margin: 7px 0 10px;
+    }
+
+    .featured-overlay p {
+      max-width: 500px;
+      color: #ddd;
       margin-bottom: 20px;
     }
 
-    .feature-content p {
+    .featured-tag {
+      align-self: flex-start;
+      padding: 7px 12px;
+      background: var(--red);
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+    }
+
+    /* =========================
+       ABOUT
+    ========================= */
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: 65px;
+      align-items: center;
+    }
+
+    .why-image {
+      min-height: 500px;
+      overflow: hidden;
+      border-radius: 26px;
+      box-shadow: var(--shadow);
+      background: #111;
+    }
+
+    .why-image img {
+      width: 100%;
+      height: 100%;
+      min-height: 500px;
+      object-fit: cover;
+    }
+
+    .why-content h2 {
+      font-size: clamp(38px, 5vw, 60px);
+      line-height: 1;
+      letter-spacing: -3px;
+      margin-bottom: 20px;
+    }
+
+    .why-content > p {
       color: #666;
       font-size: 17px;
-
       margin-bottom: 25px;
     }
 
@@ -513,19 +550,47 @@
     }
 
     .feature-list li {
-      padding: 12px 0;
-
+      padding: 13px 0;
       border-bottom: 1px solid #ddd;
-
-      font-weight: 700;
+      font-weight: 750;
     }
 
     .feature-list li::before {
       content: "✓";
-
       color: var(--red);
-
       margin-right: 10px;
+      font-weight: 900;
+    }
+
+    /* =========================
+       AUTHORIZATION
+    ========================= */
+
+    .authorization {
+      background: #0a0a0a;
+      color: #fff;
+      padding: 25px 0;
+      border-top: 1px solid #222;
+      border-bottom: 1px solid #222;
+    }
+
+    .authorization-inner {
+      max-width: 900px;
+      margin: auto;
+      text-align: center;
+    }
+
+    .authorization strong {
+      display: block;
+      color: #fff;
+      margin-bottom: 5px;
+      font-size: 14px;
+      letter-spacing: .5px;
+    }
+
+    .authorization p {
+      color: #aaa;
+      font-size: 12px;
     }
 
     /* =========================
@@ -535,39 +600,33 @@
     .inquiry {
       display: grid;
       grid-template-columns: .8fr 1.2fr;
-
       gap: 50px;
+      align-items: start;
     }
 
     .inquiry-copy h2 {
       font-size: clamp(38px, 5vw, 60px);
       line-height: 1;
       letter-spacing: -3px;
-
       margin-bottom: 20px;
     }
 
-    .inquiry-copy p {
+    .inquiry-copy > p {
       color: #666;
       font-size: 17px;
-
       margin-bottom: 25px;
     }
 
     .email-box {
       padding: 20px;
-
       border: 1px solid var(--line);
       border-radius: 15px;
-
       background: #fafafa;
     }
 
     .email-box small {
       display: block;
-
       color: #777;
-
       margin-bottom: 5px;
     }
 
@@ -577,24 +636,21 @@
 
     .form {
       padding: 30px;
-
       border: 1px solid var(--line);
       border-radius: 22px;
-
       box-shadow: var(--shadow);
+      background: #fff;
     }
 
     .form-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-
       gap: 17px;
     }
 
     .field {
       display: flex;
       flex-direction: column;
-
       gap: 7px;
     }
 
@@ -611,21 +667,19 @@
     .field select,
     .field textarea {
       width: 100%;
-
       padding: 13px 14px;
-
       border: 1px solid #d5d5d5;
       border-radius: 10px;
-
       outline: none;
-
       background: #fff;
+      transition: .2s ease;
     }
 
     .field input:focus,
     .field select:focus,
     .field textarea:focus {
       border-color: #111;
+      box-shadow: 0 0 0 3px rgba(0,0,0,.05);
     }
 
     .field textarea {
@@ -636,23 +690,23 @@
     .form-note {
       color: #777;
       font-size: 12px;
-
       margin: 15px 0 18px;
     }
 
     .submit-button {
       width: 100%;
       min-height: 53px;
-
       border: 0;
       border-radius: 30px;
-
       background: var(--red);
       color: #fff;
-
       font-weight: 900;
+      transition: .2s ease;
+    }
 
-      cursor: pointer;
+    .submit-button:hover {
+      background: var(--red-dark);
+      transform: translateY(-1px);
     }
 
     /* =========================
@@ -666,26 +720,26 @@
 
     details {
       padding: 20px 0;
-
       border-bottom: 1px solid var(--line);
     }
 
     summary {
       list-style: none;
-
       display: flex;
       align-items: center;
       justify-content: space-between;
-
       cursor: pointer;
-
       font-size: 18px;
       font-weight: 800;
+      gap: 20px;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
     }
 
     summary::after {
       content: "+";
-
       color: var(--red);
       font-size: 23px;
     }
@@ -700,29 +754,53 @@
     }
 
     /* =========================
+       CTA
+    ========================= */
+
+    .cta {
+      background:
+        linear-gradient(
+          110deg,
+          #080808,
+          #191919
+        );
+      color: #fff;
+      text-align: center;
+    }
+
+    .cta-inner {
+      max-width: 780px;
+      margin: auto;
+    }
+
+    .cta h2 {
+      font-size: clamp(40px, 6vw, 68px);
+      line-height: 1;
+      letter-spacing: -3px;
+      margin-bottom: 18px;
+    }
+
+    .cta p {
+      color: #aaa;
+      font-size: 17px;
+      margin-bottom: 28px;
+    }
+
+    /* =========================
        FOOTER
     ========================= */
 
     footer {
       background: #050505;
       color: #fff;
-
       padding: 60px 0 25px;
-    }
-
-    .footer {
-      width: min(1180px, 92%);
-      margin: auto;
     }
 
     .footer-grid {
       display: grid;
       grid-template-columns: 1.5fr 1fr 1fr;
-
       gap: 45px;
-
       padding-bottom: 40px;
-
       border-bottom: 1px solid #222;
     }
 
@@ -741,20 +819,16 @@
 
     .footer p {
       max-width: 430px;
-
       color: #888;
-
       margin-top: 12px;
     }
 
     .footer a {
       display: block;
-
       color: #999;
-
       font-size: 14px;
-
       margin: 8px 0;
+      transition: .2s ease;
     }
 
     .footer a:hover {
@@ -766,44 +840,65 @@
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 15px;
-
       padding-top: 22px;
-
       color: #666;
       font-size: 12px;
     }
 
-    .photo-credit {
-      margin-top: 8px;
-
+    .notice {
+      max-width: 900px;
+      margin: 25px auto 0;
       color: #555;
       font-size: 11px;
+      text-align: center;
     }
 
     /* =========================
        MOBILE
     ========================= */
 
-    @media (max-width: 800px) {
+    @media (max-width: 850px) {
 
       .nav {
-        min-height: 64px;
+        min-height: 65px;
       }
 
-      .logo {
-        font-size: 17px;
+      .mobile-menu {
+        display: block;
       }
 
-      .navlinks a:not(.nav-button) {
+      .navlinks {
         display: none;
+        position: fixed;
+        top: 65px;
+        left: 0;
+        right: 0;
+        background: #050505;
+        padding: 25px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 18px;
+        border-bottom: 1px solid #222;
+      }
+
+      .navlinks.open {
+        display: flex;
+      }
+
+      .navlinks a {
+        padding: 8px 0;
+      }
+
+      .nav-button {
+        text-align: center;
       }
 
       .hero {
-        min-height: 610px;
+        min-height: 620px;
       }
 
       .hero h1 {
-        font-size: 50px;
+        font-size: 52px;
       }
 
       .hero p {
@@ -823,7 +918,11 @@
         border-bottom: 0;
       }
 
-      .vehicle-grid {
+      .vehicle-grid,
+      .featured-wrap,
+      .why-grid,
+      .inquiry,
+      .footer-grid {
         grid-template-columns: 1fr;
       }
 
@@ -832,18 +931,12 @@
       }
 
       .vehicle-image {
-        height: 270px;
+        height: 275px;
       }
 
-      .feature-grid,
-      .inquiry,
-      .footer-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .feature-image,
-      .feature-image img {
-        min-height: 300px;
+      .why-image,
+      .why-image img {
+        min-height: 330px;
       }
 
       .form-grid {
@@ -857,6 +950,38 @@
       .card-actions {
         flex-direction: column;
       }
+
+      .section {
+        padding: 70px 0;
+      }
+    }
+
+    @media (max-width: 500px) {
+
+      .hero h1 {
+        font-size: 46px;
+        letter-spacing: -3px;
+      }
+
+      .hero-content {
+        padding: 80px 0;
+      }
+
+      .vehicle-body {
+        padding: 22px;
+      }
+
+      .vehicle-body h3 {
+        font-size: 32px;
+      }
+
+      .form {
+        padding: 22px;
+      }
+
+      .buttons .btn {
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -869,25 +994,26 @@
 
   <header>
 
-    <nav class="nav">
+    <nav class="nav container">
 
       <a href="#home" class="logo">
         TESLA <span>DEALS</span>
       </a>
 
-      <div class="navlinks">
+      <button
+        class="mobile-menu"
+        id="menuButton"
+        aria-label="Open menu"
+        aria-expanded="false">
+        ☰
+      </button>
 
-        <a href="#vehicles">
-          Vehicles
-        </a>
+      <div class="navlinks" id="navLinks">
 
-        <a href="#about">
-          About
-        </a>
-
-        <a href="#faq">
-          FAQ
-        </a>
+        <a href="#vehicles">Vehicles</a>
+        <a href="#featured">Featured</a>
+        <a href="#about">About</a>
+        <a href="#faq">FAQ</a>
 
         <a href="#inquiry" class="nav-button">
           Inquire
@@ -908,35 +1034,40 @@
 
     <section class="hero">
 
-      <div class="hero-content">
+      <div class="container">
 
-        <div class="eyebrow">
-          Electric Vehicles
-        </div>
+        <div class="hero-content">
 
-        <h1>
-          Find your next
-          <span>Tesla.</span>
-        </h1>
+          <div class="eyebrow">
+            Electric Vehicles
+          </div>
 
-        <p>
-          Explore Tesla vehicles, review model information
-          and send a vehicle inquiry to our inquiry team.
-        </p>
+          <h1>
+            Find your next
+            <span>Tesla.</span>
+          </h1>
 
-        <div class="buttons">
+          <p>
+            Explore selected Tesla vehicles, review available
+            information and connect with the Tesla Deals inquiry
+            team about the vehicle that interests you.
+          </p>
 
-          <a
-            href="#vehicles"
-            class="btn btn-red">
-            Explore Vehicles
-          </a>
+          <div class="buttons">
 
-          <a
-            href="#inquiry"
-            class="btn btn-white">
-            Make an Inquiry
-          </a>
+            <a
+              href="#vehicles"
+              class="btn btn-red">
+              Explore Vehicles
+            </a>
+
+            <a
+              href="#inquiry"
+              class="btn btn-white">
+              Send an Inquiry
+            </a>
+
+          </div>
 
         </div>
 
@@ -946,39 +1077,34 @@
 
 
     <!-- =========================
-         TRUST BAR
+         TRUST STRIP
     ========================= -->
 
     <section class="trust">
 
-      <div class="trust-grid">
+      <div class="container trust-grid">
 
         <div class="trust-item">
-
           <strong>
-            Electric Performance
+            Vehicle Discovery
           </strong>
 
           <span>
-            Explore Tesla vehicles
+            Explore selected models
           </span>
-
         </div>
 
         <div class="trust-item">
-
           <strong>
-            Vehicle Information
+            Clear Information
           </strong>
 
           <span>
-            Review available models
+            Review vehicle details
           </span>
-
         </div>
 
         <div class="trust-item">
-
           <strong>
             Direct Inquiry
           </strong>
@@ -986,8 +1112,30 @@
           <span>
             Contact the inquiry team
           </span>
-
         </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         AUTHORIZATION
+    ========================= -->
+
+    <section class="authorization">
+
+      <div class="container authorization-inner">
+
+        <strong>
+          Tesla Deals — Authorized Business
+        </strong>
+
+        <p>
+          Tesla Deals operates as an authorized business as represented by its management.
+          Product availability, specifications, pricing and purchasing terms should be confirmed
+          directly with the Tesla Deals inquiry team.
+        </p>
 
       </div>
 
@@ -1002,318 +1150,370 @@
       class="section"
       id="vehicles">
 
-      <div class="heading">
+      <div class="container">
 
-        <div class="eyebrow">
-          Vehicle Lineup
+        <div class="heading">
+
+          <div class="eyebrow">
+            Vehicle Lineup
+          </div>
+
+          <h2>
+            Explore the lineup.
+          </h2>
+
+          <p>
+            Discover selected Tesla models and send an
+            inquiry about the vehicle you're interested in.
+          </p>
+
         </div>
 
-        <h2>
-          Choose your Tesla.
-        </h2>
 
-        <p>
-          Explore three verified Tesla vehicle models
-          and submit an inquiry about the one you prefer.
+        <div class="vehicle-grid">
+
+
+          <!-- MODEL 3 -->
+
+          <article class="vehicle-card">
+
+            <div class="vehicle-image">
+
+              <img
+                src="https://images.unsplash.com/photo-1619767886558-efdc259cde1a?auto=format&fit=crop&w=1400&q=85"
+                alt="Tesla vehicle"
+                loading="lazy"
+                onerror="this.style.display='none'"
+              >
+
+              <div class="vehicle-label">
+                MODEL 3
+              </div>
+
+            </div>
+
+            <div class="vehicle-body">
+
+              <div class="vehicle-category">
+                Electric Sedan
+              </div>
+
+              <h3>
+                Model 3
+              </h3>
+
+              <p>
+                A streamlined electric sedan designed for
+                everyday driving and performance.
+              </p>
+
+              <div class="spec-grid">
+
+                <div class="spec">
+                  <strong>Electric</strong>
+                  <span>Powertrain</span>
+                </div>
+
+                <div class="spec">
+                  <strong>5</strong>
+                  <span>Seats</span>
+                </div>
+
+                <div class="spec">
+                  <strong>AWD*</strong>
+                  <span>Available</span>
+                </div>
+
+              </div>
+
+              <div class="card-actions">
+
+                <a
+                  href="#inquiry"
+                  class="btn btn-dark"
+                  onclick="selectVehicle('Model 3')">
+                  Inquire About Model 3
+                </a>
+
+              </div>
+
+            </div>
+
+          </article>
+
+
+          <!-- MODEL Y -->
+
+          <article class="vehicle-card">
+
+            <div class="vehicle-image">
+
+              <img
+                src="https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=1400&q=85"
+                alt="Electric vehicle"
+                loading="lazy"
+                onerror="this.style.display='none'"
+              >
+
+              <div class="vehicle-label">
+                MODEL Y
+              </div>
+
+            </div>
+
+            <div class="vehicle-body">
+
+              <div class="vehicle-category">
+                Electric SUV
+              </div>
+
+              <h3>
+                Model Y
+              </h3>
+
+              <p>
+                A versatile electric SUV built around
+                space, comfort and everyday utility.
+              </p>
+
+              <div class="spec-grid">
+
+                <div class="spec">
+                  <strong>Electric</strong>
+                  <span>Powertrain</span>
+                </div>
+
+                <div class="spec">
+                  <strong>5</strong>
+                  <span>Seats</span>
+                </div>
+
+                <div class="spec">
+                  <strong>AWD*</strong>
+                  <span>Available</span>
+                </div>
+
+              </div>
+
+              <div class="card-actions">
+
+                <a
+                  href="#inquiry"
+                  class="btn btn-dark"
+                  onclick="selectVehicle('Model Y')">
+                  Inquire About Model Y
+                </a>
+
+              </div>
+
+            </div>
+
+          </article>
+
+
+          <!-- CYBERTRUCK -->
+
+          <article class="vehicle-card featured">
+
+            <div class="vehicle-image">
+
+              <img
+                src="https://images.unsplash.com/photo-1669130748758-7d7f5e7a2c68?auto=format&fit=crop&w=1600&q=85"
+                alt="Electric truck"
+                loading="lazy"
+                onerror="this.style.display='none'"
+              >
+
+              <div class="vehicle-label">
+                CYBERTRUCK
+              </div>
+
+            </div>
+
+            <div class="vehicle-body">
+
+              <div class="vehicle-category">
+                Electric Utility Truck
+              </div>
+
+              <h3>
+                Cybertruck
+              </h3>
+
+              <p>
+                A distinctive electric truck designed around
+                utility, cargo and capability.
+              </p>
+
+              <div class="spec-grid">
+
+                <div class="spec">
+                  <strong>Electric</strong>
+                  <span>Powertrain</span>
+                </div>
+
+                <div class="spec">
+                  <strong>5</strong>
+                  <span>Seats</span>
+                </div>
+
+                <div class="spec">
+                  <strong>AWD*</strong>
+                  <span>Available</span>
+                </div>
+
+              </div>
+
+              <div class="card-actions">
+
+                <a
+                  href="#inquiry"
+                  class="btn btn-red"
+                  onclick="selectVehicle('Cybertruck')">
+                  Inquire About Cybertruck
+                </a>
+
+              </div>
+
+            </div>
+
+          </article>
+
+        </div>
+
+
+        <p
+          style="
+            text-align:center;
+            color:#777;
+            font-size:12px;
+            margin-top:20px;
+          ">
+
+          *Specifications can vary by configuration,
+          market and model year. Confirm current details
+          with the inquiry team before purchasing.
+
         </p>
 
       </div>
 
+    </section>
 
-      <div class="vehicle-grid">
+
+    <!-- =========================
+         FEATURED
+    ========================= -->
+
+    <section
+      class="section section-light"
+      id="featured">
+
+      <div class="container">
+
+        <div class="heading">
+
+          <div class="eyebrow">
+            Featured
+          </div>
+
+          <h2>
+            What's catching attention.
+          </h2>
+
+          <p>
+            Featured vehicles can be highlighted here as
+            the collection develops.
+          </p>
+
+        </div>
 
 
-        <!-- MODEL 3 -->
+        <div class="featured-wrap">
 
-        <article class="vehicle-card">
 
-          <div class="vehicle-image">
+          <article class="featured-card">
 
             <img
-              src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Tesla_Model_3_front_(October_31,_2024).jpg"
-              alt="Tesla Model 3"
+              src="https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=1600&q=85"
+              alt="Electric SUV"
               loading="lazy"
+              onerror="this.style.display='none'"
             >
 
-            <div class="vehicle-label">
-              MODEL 3
-            </div>
+            <div class="featured-overlay">
 
-          </div>
-
-
-          <div class="vehicle-body">
-
-            <div class="vehicle-category">
-              Electric Sedan
-            </div>
-
-            <h3>
-              Model 3
-            </h3>
-
-            <p>
-              A streamlined electric sedan designed
-              for everyday driving and performance.
-            </p>
-
-
-            <div class="spec-grid">
-
-              <div class="spec">
-
-                <strong>
-                  Electric
-                </strong>
-
-                <span>
-                  Powertrain
-                </span>
-
+              <div class="featured-tag">
+                FEATURED VEHICLE
               </div>
 
-              <div class="spec">
+              <h3>
+                Model Y
+              </h3>
 
-                <strong>
-                  5
-                </strong>
+              <p>
+                Explore the vehicle and contact the team
+                for current information and availability.
+              </p>
 
-                <span>
-                  Seats
-                </span>
+              <div>
 
-              </div>
-
-              <div class="spec">
-
-                <strong>
-                  AWD*
-                </strong>
-
-                <span>
-                  Available
-                </span>
+                <a
+                  href="#inquiry"
+                  class="btn btn-red"
+                  onclick="selectVehicle('Model Y')">
+                  Ask About Model Y
+                </a>
 
               </div>
 
             </div>
 
-
-            <div class="card-actions">
-
-              <a
-                href="#inquiry"
-                class="btn btn-dark"
-                onclick="selectVehicle('Model 3')">
-                Inquire About Model 3
-              </a>
-
-            </div>
-
-          </div>
-
-        </article>
+          </article>
 
 
-        <!-- MODEL Y -->
-
-        <article class="vehicle-card">
-
-          <div class="vehicle-image">
+          <article class="featured-card">
 
             <img
-              src="https://commons.wikimedia.org/wiki/Special:Redirect/file/2020s_Tesla_Model_Y.jpg"
-              alt="Tesla Model Y"
+              src="https://images.unsplash.com/photo-1669130748758-7d7f5e7a2c68?auto=format&fit=crop&w=1600&q=85"
+              alt="Electric truck"
               loading="lazy"
+              onerror="this.style.display='none'"
             >
 
-            <div class="vehicle-label">
-              MODEL Y
-            </div>
+            <div class="featured-overlay">
 
-          </div>
-
-
-          <div class="vehicle-body">
-
-            <div class="vehicle-category">
-              Electric SUV
-            </div>
-
-            <h3>
-              Model Y
-            </h3>
-
-            <p>
-              A versatile electric SUV built around
-              space, comfort and everyday utility.
-            </p>
-
-
-            <div class="spec-grid">
-
-              <div class="spec">
-
-                <strong>
-                  Electric
-                </strong>
-
-                <span>
-                  Powertrain
-                </span>
-
+              <div class="featured-tag">
+                FEATURED
               </div>
 
-              <div class="spec">
+              <h3>
+                Cybertruck
+              </h3>
 
-                <strong>
-                  5
-                </strong>
+              <p>
+                Interested in a Cybertruck? Send your
+                requirements directly to the inquiry team.
+              </p>
 
-                <span>
-                  Seats
-                </span>
+              <div>
 
-              </div>
-
-              <div class="spec">
-
-                <strong>
-                  AWD*
-                </strong>
-
-                <span>
-                  Available
-                </span>
+                <a
+                  href="#inquiry"
+                  class="btn btn-red"
+                  onclick="selectVehicle('Cybertruck')">
+                  Ask About Cybertruck
+                </a>
 
               </div>
 
             </div>
 
+          </article>
 
-            <div class="card-actions">
-
-              <a
-                href="#inquiry"
-                class="btn btn-dark"
-                onclick="selectVehicle('Model Y')">
-                Inquire About Model Y
-              </a>
-
-            </div>
-
-          </div>
-
-        </article>
-
-
-        <!-- CYBERTRUCK -->
-
-        <article class="vehicle-card featured">
-
-          <div class="vehicle-image">
-
-            <img
-              src="https://commons.wikimedia.org/wiki/Special:Redirect/file/2024_Tesla_Cybertruck.jpg"
-              alt="Tesla Cybertruck"
-              loading="lazy"
-            >
-
-            <div class="vehicle-label">
-              CYBERTRUCK
-            </div>
-
-          </div>
-
-
-          <div class="vehicle-body">
-
-            <div class="vehicle-category">
-              Electric Utility Truck
-            </div>
-
-            <h3>
-              Cybertruck
-            </h3>
-
-            <p>
-              Tesla's distinctive electric truck designed
-              around utility, cargo and towing capability.
-            </p>
-
-
-            <div class="spec-grid">
-
-              <div class="spec">
-
-                <strong>
-                  325 mi*
-                </strong>
-
-                <span>
-                  EPA est.
-                </span>
-
-              </div>
-
-              <div class="spec">
-
-                <strong>
-                  11,000 lb*
-                </strong>
-
-                <span>
-                  Towing
-                </span>
-
-              </div>
-
-              <div class="spec">
-
-                <strong>
-                  2.6 sec*
-                </strong>
-
-                <span>
-                  0–60 mph
-                </span>
-
-              </div>
-
-            </div>
-
-
-            <div class="card-actions">
-
-              <a
-                href="#inquiry"
-                class="btn btn-red"
-                onclick="selectVehicle('Cybertruck')">
-                Inquire About Cybertruck
-              </a>
-
-            </div>
-
-          </div>
-
-        </article>
+        </div>
 
       </div>
-
-
-      <p
-        style="
-          text-align:center;
-          color:#777;
-          font-size:12px;
-          margin-top:20px;
-        ">
-
-        *Specifications can vary by configuration,
-        market and model year. Confirm current details
-        before making a purchase decision.
-
-      </p>
 
     </section>
 
@@ -1323,65 +1523,71 @@
     ========================= -->
 
     <section
-      class="feature-band"
+      class="section"
       id="about">
 
-      <div class="feature-grid">
+      <div class="container">
+
+        <div class="why-grid">
 
 
-        <div class="feature-image">
+          <div class="why-image">
 
-          <img
-            src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Tesla_Cybertruck.jpg"
-            alt="Tesla Cybertruck"
-            loading="lazy"
-          >
+            <img
+              src="https://images.unsplash.com/photo-1619767886558-efdc259cde1a?auto=format&fit=crop&w=1400&q=85"
+              alt="Electric vehicle"
+              loading="lazy"
+              onerror="this.style.display='none'"
+            >
 
-        </div>
-
-
-        <div class="feature-content">
-
-          <div class="eyebrow">
-            Explore With Confidence
           </div>
 
-          <h2>
-            Start with the vehicle that fits you.
-          </h2>
 
-          <p>
-            Tell our inquiry team which Tesla model
-            interests you and what information you need.
-          </p>
+          <div class="why-content">
 
+            <div class="eyebrow">
+              Explore With Confidence
+            </div>
 
-          <ul class="feature-list">
+            <h2>
+              Start with the vehicle that fits you.
+            </h2>
 
-            <li>
-              Explore vehicle models
-            </li>
-
-            <li>
-              Review vehicle information
-            </li>
-
-            <li>
-              Ask about availability
-            </li>
-
-            <li>
-              Submit a direct inquiry
-            </li>
-
-          </ul>
+            <p>
+              Whether you already know the model you want
+              or you're still comparing options, the inquiry
+              team can help you request the information you need.
+            </p>
 
 
-          <a
-            href="#inquiry"
-            class="btn btn-red">
-            Start an Inquiry
-          </a>
+            <ul class="feature-list">
+
+              <li>
+                Explore selected Tesla models
+              </li>
+
+              <li>
+                Ask about availability
+              </li>
+
+              <li>
+                Request vehicle information
+              </li>
+
+              <li>
+                Tell the team what you're looking for
+              </li>
+
+            </ul>
+
+
+            <a
+              href="#inquiry"
+              class="btn btn-red">
+              Start an Inquiry
+            </a>
+
+          </div>
 
         </div>
 
@@ -1395,242 +1601,244 @@
     ========================= -->
 
     <section
-      class="section"
+      class="section section-light"
       id="inquiry">
 
-      <div class="inquiry">
+      <div class="container">
+
+        <div class="inquiry">
 
 
-        <div class="inquiry-copy">
+          <div class="inquiry-copy">
 
-          <div class="eyebrow">
-            Vehicle Inquiries
+            <div class="eyebrow">
+              Vehicle Inquiries
+            </div>
+
+            <h2>
+              Let's find the right vehicle for you.
+            </h2>
+
+            <p>
+              Tell the inquiry team which vehicle interests
+              you and what information you need.
+            </p>
+
+
+            <div class="email-box">
+
+              <small>
+                Inquiry Team
+              </small>
+
+              <strong>
+                tesladeals.inquiries@outlook.com
+              </strong>
+
+            </div>
+
           </div>
 
-          <h2>
-            Let's find the right vehicle for you.
-          </h2>
 
-          <p>
-            Complete the form and tell the inquiry team
-            which Tesla model you're interested in.
-          </p>
+          <form
+            class="form"
+            name="vehicle-inquiry"
+            method="POST"
+            data-netlify="true"
+            netlify-honeypot="bot-field">
+
+            <input
+              type="hidden"
+              name="form-name"
+              value="vehicle-inquiry"
+            >
+
+            <p style="display:none;">
+
+              <label>
+                Don't fill this out:
+
+                <input
+                  name="bot-field"
+                >
+
+              </label>
+
+            </p>
 
 
-          <div class="email-box">
+            <div class="form-grid">
 
-            <small>
-              Inquiry Team
-            </small>
 
-            <strong>
-              tesladeals.inquiries@outlook.com
-            </strong>
+              <div class="field">
 
-          </div>
+                <label for="first-name">
+                  First Name *
+                </label>
+
+                <input
+                  id="first-name"
+                  name="first-name"
+                  type="text"
+                  autocomplete="given-name"
+                  placeholder="First name"
+                  required
+                >
+
+              </div>
+
+
+              <div class="field">
+
+                <label for="last-name">
+                  Last Name *
+                </label>
+
+                <input
+                  id="last-name"
+                  name="last-name"
+                  type="text"
+                  autocomplete="family-name"
+                  placeholder="Last name"
+                  required
+                >
+
+              </div>
+
+
+              <div class="field">
+
+                <label for="email">
+                  Email *
+                </label>
+
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autocomplete="email"
+                  placeholder="you@example.com"
+                  required
+                >
+
+              </div>
+
+
+              <div class="field">
+
+                <label for="phone">
+                  Phone
+                </label>
+
+                <input
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  autocomplete="tel"
+                  placeholder="Phone number"
+                >
+
+              </div>
+
+
+              <div class="field">
+
+                <label for="vehicle">
+                  Vehicle of Interest *
+                </label>
+
+                <select
+                  id="vehicle"
+                  name="vehicle"
+                  required>
+
+                  <option value="">
+                    Select a vehicle
+                  </option>
+
+                  <option value="Model 3">
+                    Model 3
+                  </option>
+
+                  <option value="Model Y">
+                    Model Y
+                  </option>
+
+                  <option value="Cybertruck">
+                    Cybertruck
+                  </option>
+
+                  <option value="Not sure">
+                    I'm not sure yet
+                  </option>
+
+                </select>
+
+              </div>
+
+
+              <div class="field">
+
+                <label for="contact">
+                  Preferred Contact
+                </label>
+
+                <select
+                  id="contact"
+                  name="preferred-contact">
+
+                  <option value="Email">
+                    Email
+                  </option>
+
+                  <option value="Phone">
+                    Phone
+                  </option>
+
+                  <option value="Either">
+                    Either
+                  </option>
+
+                </select>
+
+              </div>
+
+
+              <div class="field full">
+
+                <label for="message">
+                  Message *
+                </label>
+
+                <textarea
+                  id="message"
+                  name="message"
+                  placeholder="Tell us what you're looking for..."
+                  required
+                ></textarea>
+
+              </div>
+
+            </div>
+
+
+            <p class="form-note">
+              Submit your request and the designated inquiry
+              team can follow up with you.
+            </p>
+
+
+            <button
+              type="submit"
+              class="submit-button">
+
+              SEND INQUIRY
+
+            </button>
+
+          </form>
 
         </div>
-
-
-        <form
-          class="form"
-          name="vehicle-inquiry"
-          method="POST"
-          data-netlify="true"
-          netlify-honeypot="bot-field">
-
-          <input
-            type="hidden"
-            name="form-name"
-            value="vehicle-inquiry"
-          >
-
-          <p style="display:none;">
-
-            <label>
-              Don't fill this out:
-
-              <input
-                name="bot-field"
-              >
-
-            </label>
-
-          </p>
-
-
-          <div class="form-grid">
-
-
-            <div class="field">
-
-              <label for="first-name">
-                First Name *
-              </label>
-
-              <input
-                id="first-name"
-                name="first-name"
-                type="text"
-                autocomplete="given-name"
-                placeholder="First name"
-                required
-              >
-
-            </div>
-
-
-            <div class="field">
-
-              <label for="last-name">
-                Last Name *
-              </label>
-
-              <input
-                id="last-name"
-                name="last-name"
-                type="text"
-                autocomplete="family-name"
-                placeholder="Last name"
-                required
-              >
-
-            </div>
-
-
-            <div class="field">
-
-              <label for="email">
-                Email *
-              </label>
-
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autocomplete="email"
-                placeholder="you@example.com"
-                required
-              >
-
-            </div>
-
-
-            <div class="field">
-
-              <label for="phone">
-                Phone
-              </label>
-
-              <input
-                id="phone"
-                name="phone"
-                type="tel"
-                autocomplete="tel"
-                placeholder="Phone number"
-              >
-
-            </div>
-
-
-            <div class="field">
-
-              <label for="vehicle">
-                Vehicle of Interest *
-              </label>
-
-              <select
-                id="vehicle"
-                name="vehicle"
-                required>
-
-                <option value="">
-                  Select a vehicle
-                </option>
-
-                <option value="Model 3">
-                  Model 3
-                </option>
-
-                <option value="Model Y">
-                  Model Y
-                </option>
-
-                <option value="Cybertruck">
-                  Cybertruck
-                </option>
-
-                <option value="Not sure">
-                  I'm not sure yet
-                </option>
-
-              </select>
-
-            </div>
-
-
-            <div class="field">
-
-              <label for="contact">
-                Preferred Contact
-              </label>
-
-              <select
-                id="contact"
-                name="preferred-contact">
-
-                <option value="Email">
-                  Email
-                </option>
-
-                <option value="Phone">
-                  Phone
-                </option>
-
-                <option value="Either">
-                  Either
-                </option>
-
-              </select>
-
-            </div>
-
-
-            <div class="field full">
-
-              <label for="message">
-                Message *
-              </label>
-
-              <textarea
-                id="message"
-                name="message"
-                placeholder="Tell us which vehicle you are interested in and what information you need."
-                required
-              ></textarea>
-
-            </div>
-
-          </div>
-
-
-          <p class="form-note">
-
-            By submitting this form, you are requesting
-            vehicle information from the inquiry team.
-
-          </p>
-
-
-          <button
-            type="submit"
-            class="submit-button">
-
-            SEND INQUIRY
-
-          </button>
-
-        </form>
 
       </div>
 
@@ -1645,78 +1853,130 @@
       class="section"
       id="faq">
 
-      <div class="heading">
+      <div class="container">
 
-        <div class="eyebrow">
-          FAQ
+        <div class="heading">
+
+          <div class="eyebrow">
+            FAQ
+          </div>
+
+          <h2>
+            Frequently asked questions.
+          </h2>
+
         </div>
 
-        <h2>
-          Frequently asked questions.
-        </h2>
+
+        <div class="faq">
+
+
+          <details>
+
+            <summary>
+              How do I inquire about a vehicle?
+            </summary>
+
+            <p>
+              Select the vehicle you're interested in and
+              complete the inquiry form. Include any questions
+              or requirements in your message.
+            </p>
+
+          </details>
+
+
+          <details>
+
+            <summary>
+              Can I ask about availability?
+            </summary>
+
+            <p>
+              Yes. Include the model you're interested in
+              and ask the inquiry team about current availability.
+            </p>
+
+          </details>
+
+
+          <details>
+
+            <summary>
+              Can I request a specific configuration?
+            </summary>
+
+            <p>
+              Yes. Add your preferred configuration, options
+              or requirements to your inquiry.
+            </p>
+
+          </details>
+
+
+          <details>
+
+            <summary>
+              Where does my inquiry go?
+            </summary>
+
+            <p>
+              The form uses Netlify Forms. The site administrator
+              can configure the notification destination for submitted inquiries.
+            </p>
+
+          </details>
+
+
+        </div>
 
       </div>
 
-
-      <div class="faq">
-
-
-        <details>
-
-          <summary>
-            How do I inquire about a vehicle?
-          </summary>
-
-          <p>
-            Choose a vehicle above or select one inside
-            the inquiry form, then send your request.
-          </p>
-
-        </details>
+    </section>
 
 
-        <details>
+    <!-- =========================
+         CTA
+    ========================= -->
 
-          <summary>
-            Can I ask about availability?
-          </summary>
+    <section class="section cta">
+
+      <div class="container">
+
+        <div class="cta-inner">
+
+          <div class="eyebrow">
+            Ready to Explore?
+          </div>
+
+          <h2>
+            Your next drive starts here.
+          </h2>
 
           <p>
-            Yes. Include the model you're interested in
-            and ask about current availability in your message.
+            Explore the lineup or send an inquiry to the team
+            about the Tesla vehicle you're interested in.
           </p>
 
-        </details>
+          <div
+            class="buttons"
+            style="justify-content:center;">
 
+            <a
+              href="#vehicles"
+              class="btn btn-white">
+              Explore Vehicles
+            </a>
 
-        <details>
+            <a
+              href="#inquiry"
+              class="btn btn-red">
+              Send an Inquiry
+            </a>
 
-          <summary>
-            Can I ask about a specific configuration?
-          </summary>
+          </div>
 
-          <p>
-            Yes. You can include your preferred configuration,
-            options or other requirements in the message field.
-          </p>
-
-        </details>
-
-
-        <details>
-
-          <summary>
-            Where does my inquiry go?
-          </summary>
-
-          <p>
-            The website collects the submitted inquiry
-            through its Netlify form. Netlify can be configured
-            to notify the designated inquiry email.
-          </p>
-
-        </details>
-
+        </div>
 
       </div>
 
@@ -1731,8 +1991,7 @@
 
   <footer>
 
-    <div class="footer">
-
+    <div class="container footer">
 
       <div class="footer-grid">
 
@@ -1744,8 +2003,8 @@
           </h3>
 
           <p>
-            Explore Tesla vehicles, review model information
-            and submit vehicle inquiries online.
+            Explore selected Tesla vehicles, review model
+            information and submit vehicle inquiries online.
           </p>
 
         </div>
@@ -1761,6 +2020,10 @@
             Vehicles
           </a>
 
+          <a href="#featured">
+            Featured
+          </a>
+
           <a href="#about">
             About
           </a>
@@ -1769,21 +2032,17 @@
             FAQ
           </a>
 
-          <a href="#inquiry">
-            Vehicle Inquiry
-          </a>
-
         </div>
 
 
         <div>
 
           <h4>
-            Inquiry
+            Contact
           </h4>
 
           <a href="#inquiry">
-            Submit Inquiry
+            Vehicle Inquiry
           </a>
 
           <a href="mailto:tesladeals.inquiries@outlook.com">
@@ -1799,55 +2058,92 @@
       <div class="bottom">
 
         <span>
-          © 2026 Tesla Deals. All rights reserved.
+          © <span id="year"></span> Tesla Deals. All rights reserved.
         </span>
 
         <span>
-          Vehicle information may vary by market and configuration.
+          Electric vehicles • Vehicle inquiries
         </span>
 
       </div>
 
 
-      <div class="photo-credit">
-
-        Vehicle photographs:
-        Wikimedia Commons —
-        licensed photographs by their respective creators.
-        Model 3: Darin Caggiano / CC BY-SA 4.0.
-        Model Y: Oleg Yunakov / CC BY-SA 4.0.
-        Cybertruck: Calreyn88 / CC BY-SA 3.0.
-
-      </div>
+      <p class="notice">
+        Tesla vehicle names and related trademarks belong to their respective owner.
+        Vehicle specifications, availability, pricing and configurations may vary.
+        Confirm current information directly with the Tesla Deals inquiry team.
+      </p>
 
     </div>
 
   </footer>
 
 
+  <!-- =========================
+       JAVASCRIPT
+  ========================= -->
+
   <script>
 
-    function selectVehicle(vehicle) {
+    const menuButton = document.getElementById("menuButton");
+    const navLinks = document.getElementById("navLinks");
 
-      const select =
+    menuButton.addEventListener("click", function () {
+
+      navLinks.classList.toggle("open");
+
+      const isOpen =
+        navLinks.classList.contains("open");
+
+      menuButton.setAttribute(
+        "aria-expanded",
+        isOpen ? "true" : "false"
+      );
+
+      document.body.classList.toggle(
+        "menu-open",
+        isOpen
+      );
+
+    });
+
+
+    document.querySelectorAll(".navlinks a").forEach(function(link) {
+
+      link.addEventListener("click", function() {
+
+        navLinks.classList.remove("open");
+
+        menuButton.setAttribute(
+          "aria-expanded",
+          "false"
+        );
+
+        document.body.classList.remove(
+          "menu-open"
+        );
+
+      });
+
+    });
+
+
+    function selectVehicle(vehicleName) {
+
+      const vehicleSelect =
         document.getElementById("vehicle");
 
-      if (select) {
-        select.value = vehicle;
+      if (vehicleSelect) {
+
+        vehicleSelect.value = vehicleName;
+
       }
 
-      setTimeout(function() {
-
-        const firstName =
-          document.getElementById("first-name");
-
-        if (firstName) {
-          firstName.focus();
-        }
-
-      }, 400);
-
     }
+
+
+    document.getElementById("year").textContent =
+      new Date().getFullYear();
 
   </script>
 
